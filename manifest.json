@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Medium to Freedium Redirector",
+  "version": "1.0.0",
+  "description": "Opens Medium links (medium.com and its subdomains) through a Freedium mirror instead of loading Medium directly.",
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": [
+    "*://medium.com/*",
+    "*://*.medium.com/*",
+    "*://blog.vijayasekhardeepak.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Medium to Freedium",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

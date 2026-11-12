@@ -1,0 +1,6 @@
+# Never commit the signing key: it can push updates as this extension ID.
+*.pem
+
+# Build artifacts - published as GitHub Release assets instead.
+medium-to-freedium.crx
+medium-to-freedium.zip

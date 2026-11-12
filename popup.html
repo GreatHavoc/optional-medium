@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font: 13px system-ui, sans-serif; width: 280px; margin: 12px; }
+    label { display: block; margin-bottom: 8px; }
+    input[type=text] { width: 100%; box-sizing: border-box; margin: 4px 0 8px; padding: 4px; }
+    textarea { width: 100%; box-sizing: border-box; margin: 4px 0 0; padding: 4px; font: 12px monospace; }
+    #status { color: #666; min-height: 1.2em; margin-top: 6px; }
+    .hint { color: #888; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <form id="form">
+    <label><input type="checkbox" id="enabled"> Redirect Medium links to Freedium</label>
+    <label>Mirror domain
+      <input type="text" id="mirror" placeholder="freedium-mirror.cfd">
+    </label>
+    <label>Extra Medium custom domains
+      <textarea id="extraDomains" rows="3" placeholder="blog.example.com"></textarea>
+    </label>
+    <div class="hint">Comma or newline separated. Saving asks for access to each one.</div>
+    <p><button type="submit">Save</button></p>
+    <div id="status"></div>
+  </form>
+  <script src="popup.js"></script>
+</body>
+</html>

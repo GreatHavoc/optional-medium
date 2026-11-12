@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="badge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#363b43"/>
+      <stop offset="1" stop-color="#17191d"/>
+    </linearGradient>
+  </defs>
+
+  <!-- badge -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#badge)"/>
+  <rect x="6.5" y="6.5" width="115" height="115" rx="25.5" fill="none"
+        stroke="#ffffff" stroke-opacity="0.10" stroke-width="2"/>
+
+  <!-- open shackle: right end lifted off the body -->
+  <path d="M 46 60 V 42 A 18 18 0 0 1 82 42"
+        fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- lock body -->
+  <rect x="36" y="58" width="56" height="48" rx="12" fill="#ffffff"/>
+
+  <!-- arrow escaping through the lock -->
+  <path d="M 54 68 H 72 V 62 L 86 80 L 72 98 V 92 H 54 Z" fill="#34d399"/>
+</svg>
