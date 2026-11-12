@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Medium to Freedium Redirector",
+  "name": "Optional Medium",
   "version": "1.0.0",
-  "description": "Opens Medium links (medium.com and its subdomains) through a Freedium mirror instead of loading Medium directly.",
+  "description": "Makes the Medium site optional: opens Medium links (medium.com and custom-domain publications) on a Freedium mirror instead of loading Medium directly.",
   "permissions": [
     "storage",
     "declarativeNetRequest",

@@ -1,7 +1,7 @@
-# Medium → Freedium Redirector
+# Optional Medium
 
-Any navigation to `medium.com`, `*.medium.com`, or a user-listed custom-domain Medium
-publication is redirected to the same URL on a Freedium mirror:
+Makes the Medium site optional: links to `medium.com`, `*.medium.com`, or a
+custom-domain Medium publication open on a Freedium mirror instead:
 
 ```
 https://medium.com/@user/post              → https://freedium-mirror.cfd/https://medium.com/@user/post
@@ -18,14 +18,14 @@ Covers every way a link can be opened: address bar, paste, click, Ctrl-click,
 
 1. Open `chrome://extensions` (or the browser's equivalent).
 2. Turn on **Developer mode**.
-3. Either **Load unpacked** → pick this folder, or drag `medium-to-freedium.crx`
+3. Either **Load unpacked** → pick this folder, or drag `optional-medium.crx`
    from the [Releases](../../releases) page onto the extensions page.
 
 > Note: stock Chrome on Windows/macOS blocks installing a `.crx` from outside the
 > Web Store, so on those the "Load unpacked" route is the reliable one. Some
 > Chromium forks accept the drag-drop.
 
-Pre-packed `medium-to-freedium.crx` and `medium-to-freedium.zip` are attached to
+Pre-packed `optional-medium.crx` and `optional-medium.zip` are attached to
 the latest GitHub Release. The `.pem` signing key is deliberately not in this repo.
 
 ### Where one-click install is actually possible
@@ -53,7 +53,8 @@ Links clicked *from the mirror itself* are not redirected, so the mirror's
   upload at `chrome.google.com/webstore/dev/dashboard`.
 - **Sideload / distribution:** `chrome://extensions` → Developer mode → **Pack extension…**
   → root: this folder, key: `../medium-to-freedium.pem` (leave blank on the first pack to
-  generate it). Output: `medium-to-freedium.crx`. Drag the `.crx` onto the extensions page.
+  generate it — the name of the key file doesn't matter, only its contents). Output:
+  `optional-medium.crx`. Drag the `.crx` onto the extensions page.
   Re-packing without the same `.pem` changes the extension ID and wipes saved settings.
 
 ## Icons
