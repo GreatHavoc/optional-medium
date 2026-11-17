@@ -31,7 +31,9 @@ $("form").addEventListener("submit", (e) => {
   });
 
   // Host permissions for the extra domains, granted one at a time from this click.
+  // Safari and Firefox for Android have no runtime permission request, so degrade quietly.
   (async () => {
+    if (!chrome.permissions || !chrome.permissions.request) return;
     for (const d of domains) {
       const origins = ["*://" + d + "/*"];
       if (!(await chrome.permissions.contains({ origins }))) {
