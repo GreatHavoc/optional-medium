@@ -17,7 +17,7 @@ subdomains, and custom-domain Medium blogs.
 
 | Browser | Status | Get it |
 |---|---|---|
-| Chrome, Edge, Brave, Arc, any Chromium | Available now | [Releases](https://github.com/GreatHavoc/optional-medium/releases/latest) — `.crx` or `Load unpacked` |
+| Chrome, Edge, Brave, Arc, any Chromium | Available now | [Releases](https://github.com/GreatHavoc/optional-medium/releases/latest) — `.zip`, then Load unpacked (a signed `.crx` is attached whenever it is re-packed) |
 | Firefox | Package ready, listing pending | `optional-medium-firefox.zip` on the same release page; the addons.mozilla.org link follows when the listing is live |
 | Safari on macOS | Free, your own Mac only | see **Safari on macOS** below |
 | Safari on iPhone / iPad | Free, your own device only | see **iPhone and iPad** below |
@@ -31,13 +31,15 @@ truth for builds. Each build is the same extension — only the packaging differ
 
 **Option A — from the build** (works in any Chromium browser)
 
-1. Download `optional-medium.crx` from the [latest release](https://github.com/GreatHavoc/optional-medium/releases/latest).
+1. Download `optional-medium.zip` from the [latest release](https://github.com/GreatHavoc/optional-medium/releases/latest)
+   and unzip it.
 2. Open `chrome://extensions` (or your browser's equivalent) and turn on **Developer mode**.
-3. Drag the `.crx` file onto that page.
+3. **Load unpacked** → select the unzipped folder.
 
-> Stock Chrome on Windows/macOS blocks extensions from outside the Web Store, so
-> there drag-drop refuses to work — use Option B instead. Chromium forks that don't
-> enforce the store accept it.
+> A signed `.crx` is faster to install (drag it onto the extensions page) but stock
+> Chrome on Windows/macOS blocks `.crx` from outside the Web Store; Chromium forks
+> that don't enforce the store accept it. When a `.crx` is attached to the release it
+> replaces the two drag steps above.
 
 **Option B — from source**
 
