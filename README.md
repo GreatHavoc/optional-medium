@@ -6,7 +6,7 @@
 
 A small browser extension that stops Medium from being the only way you read Medium.
 Click, paste, or type any Medium link and it opens the same article on a Freedium
-mirror — no paywall wall, no login prompt, no "member-only" truncation.
+mirror. You get the full text without a login or a membership prompt.
 
 Works on `medium.com`, `medium.com/@author/...` publications, `*.medium.com`
 subdomains, and custom-domain Medium blogs.
@@ -17,8 +17,8 @@ subdomains, and custom-domain Medium blogs.
 
 | Browser | Status | Get it |
 |---|---|---|
-| Chrome, Edge, Brave, Arc, any Chromium | Available now | [Releases](https://github.com/GreatHavoc/optional-medium/releases/latest) — `.zip`, then Load unpacked (a signed `.crx` is attached whenever it is re-packed) |
-| Firefox | Package ready, listing pending | `optional-medium-firefox.zip` on the same release page; the addons.mozilla.org link follows when the listing is live |
+| Chrome, Edge, Brave, Arc, any Chromium | Available now | [Releases](https://github.com/GreatHavoc/optional-medium/releases/latest): download the zip, unzip it, then Load unpacked |
+| Firefox | Live on Firefox Add-ons | [Install from AMO](https://addons.mozilla.org/en-US/firefox/addon/optional-medium/) (version 1.0.0) |
 | Safari on macOS | Free, your own Mac only | see **Safari on macOS** below |
 | Safari on iPhone / iPad | Free, your own device only | see **iPhone and iPad** below |
 
@@ -29,7 +29,7 @@ truth for builds. Each build is the same extension — only the packaging differ
 
 ## Install
 
-**Option A — from the build** (works in any Chromium browser)
+**Option A: from the build** (works in any Chromium browser)
 
 1. Download `optional-medium.zip` from the [latest release](https://github.com/GreatHavoc/optional-medium/releases/latest)
    and unzip it.
@@ -41,7 +41,7 @@ truth for builds. Each build is the same extension — only the packaging differ
 > that don't enforce the store accept it. When a `.crx` is attached to the release it
 > replaces the two drag steps above.
 
-**Option B — from source**
+**Option B: from source**
 
 1. Download and unzip the [release zip](https://github.com/GreatHavoc/optional-medium/releases/latest),
    or `git clone` this repo.
@@ -160,22 +160,15 @@ There is no free path for that step.
 <details>
 <summary>Maintainer notes</summary>
 
-- Build assets live on the release page: `optional-medium.crx`, `optional-medium.zip`
-  (Chromium store), `optional-medium-firefox.zip` (AMO, contains the
-  `background.scripts` fallback Chrome rejects). Repack the `.crx` with the **existing**
-  `.pem`, never a fresh key — the extension ID comes from it and a new key wipes every
-  user's settings.
-- **Firefox (AMO) is not yet submitted** — it needs a Firefox Account login or AMO API
-  credentials, which must be run by the account owner:
-  1. Sign in at [addons.mozilla.org/developers](https://addons.mozilla.org/developers/) and
-     **Submit a New Add-on** → upload `optional-medium-firefox.zip`, list on AMO.
-  2. Or from a shell you control: `web-ext sign --channel listed --api-key <user> --api-secret <secret>`
-  3. Listing text to paste: name `Optional Medium`; summary "Opens Medium links on a
-     Freedium mirror instead of Medium itself."; description = the "Use it" section above;
-     categories *Other*, tags `medium freedium paywall redirect`; icon `icon128.png`;
-     two screenshots 1280×800. Data collection: none — already declared in the manifest.
-  4. Firefox for Android is supported too; `permissions.request` is guarded so the popup
-     degrades quietly there.
+- Build assets on the release page: `optional-medium.zip` (Chromium) and
+  `optional-medium-firefox.zip` (AMO, with the `background.scripts` fallback that Chrome
+  rejects in MV3). To make a `.crx`, pack the source in chrome://extensions with the
+  existing `.pem`. A new key changes the extension ID and wipes saved settings.
+- Firefox: version 1.0.0 is public on AMO after automated screening on 20 Nov 2026.
+  Mozilla may review it by hand later. The listing uses the "Use it" text, the
+  `icon128.png` icon, two 1280x800 screenshots, tags `medium freedium paywall redirect`,
+  no data collection, and the Contributions URL https://github.com/sponsors/GreatHavoc.
+  Firefox for Android is included; the popup guards `permissions.request` there.
 - `assets/banner.png` is the social preview; upload it in repo Settings → Options →
   Social preview (no API for this).
 </details>
