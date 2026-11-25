@@ -23,7 +23,23 @@ function buildRule(mirror, extraDomains) {
   };
 }
 
-async function applyConfig() {
+const WATCHED_KEYS = [
+  "enabled", "mode", "pauseUntil", "mirrorMode", "pinnedMirror",
+  "extraDomains", "mirrorStatus"
+];
+
+// Storage changes can fire while applyConfig is still running. Serialise the
+// rule updates so two calls never add rule id 1 at the same time.
+let applyQueue = Promise.resolve();
+
+function applyConfig() {
+  applyQueue = applyQueue.then(runApplyConfig).catch((err) => {
+    console.error("applyConfig failed", err);
+  });
+  return applyQueue;
+}
+
+async function runApplyConfig() {
   const cfg = Object.assign({}, DEFAULTS, await chrome.storage.local.get(DEFAULTS));
   const mirror = pickMirror(cfg);
   const paused =
@@ -81,6 +97,7 @@ chrome.runtime.onStartup.addListener(async () => {
 });
 
 chrome.storage.onChanged.addListener(async (changes) => {
+  if (!WATCHED_KEYS.some((key) => key in changes)) return;
   if (changes.mode || changes.pauseUntil) await schedulePauseAlarm();
   await applyConfig();
 });
