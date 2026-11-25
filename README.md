@@ -176,11 +176,12 @@ There is no free path for that step.
   reads the file from raw.githubusercontent.com and keeps the last good mirror if the
   fetch fails.
 - Tests: `node tests/config.test.cjs` and `python tests/test_probe_mirrors.py`.
-- Firefox: version 1.0.0 is public on AMO after automated screening on 20 Nov 2026.
-  Mozilla may review it by hand later. The listing uses the "Use it" text, the
+- Firefox: version 2.0.0 is public on AMO, approved on 25 Nov 2026. It supports
+  Firefox 142+ and Firefox for Android 142+. The listing uses the "Use it" text, the
   `icon128.png` icon, two 1280x800 screenshots, tags `medium freedium paywall redirect`,
   no data collection, and the Contributions URL https://github.com/sponsors/GreatHavoc.
-  Firefox for Android is included; the popup guards `permissions.request` there.
+  The popup guards `permissions.request` on Android.
+- Chromium: version 2.0.0 is on the GitHub release page with `optional-medium.zip`.
 - `assets/banner.png` is the social preview; upload it in repo Settings → Options →
   Social preview (no API for this).
 </details>
