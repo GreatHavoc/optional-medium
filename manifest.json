@@ -28,7 +28,7 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Medium to Freedium",
+    "default_title": "Optional Medium",
     "default_popup": "popup.html"
   },
   "icons": {
