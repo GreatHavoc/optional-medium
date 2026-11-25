@@ -1,0 +1,7 @@
+{
+  "updated": "2026-11-25T00:00:00Z",
+  "mirrors": [
+    { "host": "freedium-mirror.cfd", "up": true, "failCount": 0 },
+    { "host": "freedium.cfd", "up": false, "failCount": 2 }
+  ]
+}

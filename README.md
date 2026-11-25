@@ -60,21 +60,23 @@ bookmarks — opens on the mirror instead.
 **Reading normally.** The article loads on the mirror. Text is complete and free.
 
 **Want the original anyway?** Links clicked *from inside* the mirror page are left
-alone, so its own "open original article" button still takes you to Medium. If you
-want Medium for one link only, copy the URL and open it in a private window with the
-extension disabled, or just disable the redirect in the popup first.
+alone, so its own "open original article" button still takes you to Medium. For a
+link found elsewhere, pause the extension for 10 minutes, read the article on
+Medium, then click Resume.
 
-**Pause it.** Click the toolbar icon → untick **Redirect Medium links** → Save.
+**Pause it.** Click the toolbar icon and choose 10 min, 1 hour, or Restart. The
+redirect comes back when the timer ends, or on the next browser start for Restart.
+Resume turns it back on immediately.
 
 **Add another custom-domain blog.** Same popup, paste the domain(s) into
 **Extra Medium custom domains** (one per line, e.g. `blog.example.com`),
 Save, and accept the browser's access prompt for each. From then on those
 publications redirect too.
 
-**The mirror went down?** Freedium's domains rotate and the current one may die.
-The popup's **Mirror domain** field is the only thing you change — type the working
-one (currently `freedium-mirror.cfd`), Save, and links start resolving again.
-Nothing else to edit, no rebuild.
+**The mirror went down?** A daily check probes the known Freedium mirrors and writes
+the healthy ones to `mirrors.json`. The extension picks the first healthy mirror
+automatically. If every mirror is down, it keeps the last one it used. To override
+the choice, set **Mirror mode** to Manual and type a working host in **Mirror domain**.
 
 ---
 
@@ -83,7 +85,9 @@ Nothing else to edit, no rebuild.
 | Field | Default | What it does |
 |---|---|---|
 | Redirect Medium links | on | Master switch; off = plain browsing, extension inert |
-| Mirror domain | `freedium-mirror.cfd` | Which Freedium instance links go to |
+| Pause | none | Pause for 10 min, 1 hour, or until browser restart |
+| Mirror mode | Automatic | Automatic uses the health list. Manual pins one host |
+| Mirror domain | `freedium-mirror.cfd` | Pinned host, used only in Manual mode |
 | Extra Medium custom domains | *(a starter example)* | Custom-domain Medium blogs to include |
 
 ---
@@ -93,8 +97,9 @@ Nothing else to edit, no rebuild.
 **The article shows on Medium anyway.** The link was clicked from the mirror page itself
 (by design) or the domain isn't in the list above. Add it in the popup.
 
-**The mirror page is blank or errors.** That mirror is down — change **Mirror domain**
-in the popup to the current Freedium domain.
+**The mirror page is blank or errors.** Set **Mirror mode** to Manual and type a
+working Freedium host in the popup. Automatic mode switches back on the next daily
+check once a mirror is healthy again.
 
 **Nothing redirects after a browser update.** `chrome://extensions` → hit the reload
 icon on the card; the browser sometimes drops extension state across updates.
@@ -161,9 +166,16 @@ There is no free path for that step.
 <summary>Maintainer notes</summary>
 
 - Build assets on the release page: `optional-medium.zip` (Chromium) and
-  `optional-medium-firefox.zip` (AMO, with the `background.scripts` fallback that Chrome
-  rejects in MV3). To make a `.crx`, pack the source in chrome://extensions with the
-  existing `.pem`. A new key changes the extension ID and wipes saved settings.
+  `optional-medium-firefox.zip` (AMO). Both packages must include `config.js`. The
+  Firefox manifest uses `background.scripts: ["config.js", "background.js"]`; Chrome
+  loads `config.js` through `importScripts` from the service worker. To make a `.crx`,
+  pack the source in chrome://extensions with the existing `.pem`. A new key changes
+  the extension ID and wipes saved settings.
+- Mirror health: `mirrors.json` and `scripts/probe_mirrors.py` are at the repo root.
+  `.github/workflows/probe-mirrors.yml` probes daily and commits changes. The extension
+  reads the file from raw.githubusercontent.com and keeps the last good mirror if the
+  fetch fails.
+- Tests: `node tests/config.test.cjs` and `python tests/test_probe_mirrors.py`.
 - Firefox: version 1.0.0 is public on AMO after automated screening on 20 Nov 2026.
   Mozilla may review it by hand later. The listing uses the "Use it" text, the
   `icon128.png` icon, two 1280x800 screenshots, tags `medium freedium paywall redirect`,

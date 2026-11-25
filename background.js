@@ -1,35 +1,11 @@
 // Rewrites navigations to medium.com, its subdomains, or any user-listed extra
 // Medium custom domain into <mirror>/<original-url>.
-// One dynamic rule is (re)built whenever the config changes; nothing else runs here.
+// The mirror comes from a bundled default, a local health file, or a manual pin.
+// A failed health fetch never removes the current rule.
 
-const DEFAULTS = {
-  enabled: true,
-  mirror: "freedium-mirror.cfd",
-  extraDomains: "blog.vijayasekhardeepak.com"
-};
-const RULE_ID = 1;
-
-function normalizeHost(value) {
-  return (value || "")
-    .trim()
-    .replace(/^https?:\/\//, "")
-    .replace(/\/+$/, "");
-}
-
-// RE2 (no lookaround), so each host is spelled out and alternated.
-function buildRegexFilter(extraDomains) {
-  const hosts = ["([a-z0-9-]+\\.)*medium\\.com"];
-  const extras = extraDomains
-    .split(/[\s,]+/)
-    .map(normalizeHost)
-    .filter(Boolean)
-    .map((d) => "(www\\.)?" + d.replace(/\./g, "\\."));
-  const alternation = hosts.concat(extras).join("|");
-  return "^https?://(" + alternation + ")/.+";
-}
+if (typeof DEFAULTS === "undefined") importScripts("config.js");
 
 function buildRule(mirror, extraDomains) {
-  mirror = normalizeHost(mirror);
   return {
     id: RULE_ID,
     priority: 1,
@@ -40,7 +16,7 @@ function buildRule(mirror, extraDomains) {
     condition: {
       regexFilter: buildRegexFilter(extraDomains),
       resourceTypes: ["main_frame", "sub_frame"],
-      // Links clicked *from* the mirror itself load normally, so its
+      // Links clicked from the mirror itself load normally, so its
       // "open original article" escape hatch does not bounce straight back.
       excludedInitiatorDomains: [mirror]
     }
@@ -49,16 +25,70 @@ function buildRule(mirror, extraDomains) {
 
 async function applyConfig() {
   const cfg = Object.assign({}, DEFAULTS, await chrome.storage.local.get(DEFAULTS));
-  const mirror = normalizeHost(cfg.mirror);
+  const mirror = pickMirror(cfg);
+  const paused =
+    cfg.mode === "paused" && (cfg.pauseUntil === 0 || cfg.pauseUntil > Date.now());
+  const addRules = cfg.enabled && !paused ? [buildRule(mirror, cfg.extraDomains)] : [];
+
   const existing = await chrome.declarativeNetRequest.getDynamicRules();
-  const addRules =
-    cfg.enabled && mirror ? [buildRule(mirror, cfg.extraDomains || "")] : [];
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: existing.map((r) => r.id),
     addRules
   });
+
+  if (mirror !== cfg.lastMirror) {
+    await chrome.storage.local.set({ lastMirror: mirror });
+  }
 }
 
-chrome.runtime.onInstalled.addListener(applyConfig);
-chrome.runtime.onStartup.addListener(applyConfig);
-chrome.storage.onChanged.addListener(applyConfig);
+async function refreshMirrors() {
+  try {
+    const res = await fetch(MIRRORS_URL, { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data || !Array.isArray(data.mirrors)) return;
+    await chrome.storage.local.set({
+      mirrorStatus: { updated: Date.now(), mirrors: data.mirrors }
+    });
+  } catch (err) {
+    // Keep the last known good mirror. No rule change on a failed fetch.
+  }
+}
+
+async function schedulePauseAlarm() {
+  await chrome.alarms.clear(PAUSE_ALARM);
+  const cfg = await chrome.storage.local.get({ mode: "on", pauseUntil: 0 });
+  if (cfg.mode === "paused" && cfg.pauseUntil > 0) {
+    chrome.alarms.create(PAUSE_ALARM, { when: cfg.pauseUntil });
+  }
+}
+
+chrome.runtime.onInstalled.addListener(async () => {
+  chrome.alarms.create(MIRROR_ALARM, { periodInMinutes: 1440 });
+  await refreshMirrors();
+  await applyConfig();
+});
+
+chrome.runtime.onStartup.addListener(async () => {
+  const cfg = await chrome.storage.local.get({ mode: "on", pauseUntil: 0 });
+  if (cfg.mode === "paused" && cfg.pauseUntil === 0) {
+    await chrome.storage.local.set({ mode: "on" });
+  } else {
+    await applyConfig();
+  }
+  await schedulePauseAlarm();
+  await refreshMirrors();
+});
+
+chrome.storage.onChanged.addListener(async (changes) => {
+  if (changes.mode || changes.pauseUntil) await schedulePauseAlarm();
+  await applyConfig();
+});
+
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name === MIRROR_ALARM) {
+    await refreshMirrors();
+  } else if (alarm.name === PAUSE_ALARM) {
+    await chrome.storage.local.set({ mode: "on", pauseUntil: 0 });
+  }
+});

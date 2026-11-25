@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Optional Medium",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Makes the Medium site optional: opens Medium links (medium.com and custom-domain publications) on a Freedium mirror instead of loading Medium directly.",
   "permissions": [
     "storage",
     "declarativeNetRequest",
-    "declarativeNetRequestFeedback"
+    "declarativeNetRequestFeedback",
+    "alarms"
   ],
   "browser_specific_settings": {
     "gecko": {
@@ -20,7 +21,8 @@
   "host_permissions": [
     "*://medium.com/*",
     "*://*.medium.com/*",
-    "*://blog.vijayasekhardeepak.com/*"
+    "*://blog.vijayasekhardeepak.com/*",
+    "https://raw.githubusercontent.com/*"
   ],
   "background": {
     "service_worker": "background.js"

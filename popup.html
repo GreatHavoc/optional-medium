@@ -1,29 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <style>
-    body { font: 13px system-ui, sans-serif; width: 280px; margin: 12px; }
-    label { display: block; margin-bottom: 8px; }
-    input[type=text] { width: 100%; box-sizing: border-box; margin: 4px 0 8px; padding: 4px; }
-    textarea { width: 100%; box-sizing: border-box; margin: 4px 0 0; padding: 4px; font: 12px monospace; }
-    #status { color: #666; min-height: 1.2em; margin-top: 6px; }
-    .hint { color: #888; font-size: 11px; }
-  </style>
+<meta charset="utf-8">
+<title>Optional Medium</title>
+<style>
+  body { font: 13px/1.5 system-ui, sans-serif; width: 300px; margin: 0;
+         padding: 14px; background: #0f1115; color: #e6e8ec; }
+  h1 { font-size: 14px; margin: 0 0 10px; letter-spacing: .3px; }
+  label { display: block; margin-bottom: 10px; }
+  input[type=text], textarea, select { width: 100%; box-sizing: border-box;
+         margin: 4px 0 0; padding: 6px; background: #161920; color: #e6e8ec;
+         border: 1px solid #2a2f38; font: 12px ui-monospace, Consolas, monospace; }
+  textarea { resize: vertical; }
+  button { background: #161920; color: #e6e8ec; border: 1px solid #2a2f38;
+           padding: 5px 8px; cursor: pointer; font: 12px system-ui, sans-serif; }
+  button:hover { border-color: #6ea8fe; }
+  .row { display: flex; gap: 6px; margin: 6px 0 12px; }
+  .row button { flex: 1; }
+  .hint { color: #9aa2ae; font-size: 11px; margin: 4px 0; }
+  #status { color: #9aa2ae; font-size: 11px; font-family: ui-monospace, Consolas, monospace;
+            border-top: 1px solid #2a2f38; margin-top: 12px; padding-top: 8px; }
+  #error { color: #e2a96b; font-size: 11px; min-height: 1.2em; }
+</style>
 </head>
 <body>
+  <h1>Optional Medium</h1>
   <form id="form">
-    <label><input type="checkbox" id="enabled"> Redirect Medium links to Freedium</label>
+    <label><input type="checkbox" id="enabled"> Redirect Medium links</label>
+
+    <div class="hint">Pause without turning the extension off:</div>
+    <div class="row">
+      <button type="button" data-pause="600000">10 min</button>
+      <button type="button" data-pause="3600000">1 hour</button>
+      <button type="button" data-pause="0">Restart</button>
+      <button type="button" id="resume">Resume</button>
+    </div>
+
+    <label>Mirror mode
+      <select id="mirrorMode">
+        <option value="auto">Automatic, use health list</option>
+        <option value="manual">Manual, pin a mirror</option>
+      </select>
+    </label>
     <label>Mirror domain
       <input type="text" id="mirror" placeholder="freedium-mirror.cfd">
     </label>
     <label>Extra Medium custom domains
       <textarea id="extraDomains" rows="3" placeholder="blog.example.com"></textarea>
     </label>
-    <div class="hint">Comma or newline separated. Saving asks for access to each one.</div>
+    <div class="hint">One per line. Invalid domains are ignored.</div>
+    <div id="error"></div>
     <p><button type="submit">Save</button></p>
-    <div id="status"></div>
   </form>
+  <div id="status"></div>
+  <script src="config.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
