@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-26T06:45:45+00:00",
+  "updated": "2026-11-26T16:59:59+00:00",
   "mirrors": [
     {
       "host": "freedium-mirror.cfd",
@@ -9,7 +9,7 @@
     {
       "host": "freedium.cfd",
       "up": false,
-      "failCount": 3
+      "failCount": 4
     }
   ]
 }
